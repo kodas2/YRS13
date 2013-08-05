@@ -6,8 +6,8 @@
 		$dom->loadHTML($response);
 		$dom->saveHTML();
 		$linkToPageElement = $dom->getElementByClassName("newaps")[0];
-		$linkToPage = linkToPageElement->getAttribute("href");
-		$secondResponse = http_get(linkToPage);
+		$linkToPage = $linkToPageElement->getAttribute("href");
+		$secondResponse = http_get($linkToPage);
 		if ($secondResponse) {
 			$secondDom = new DOMDocument();
 			$secondDom->loadHTML($secondResponse);
