@@ -6,6 +6,8 @@ if((isset($_POST['stockname']))) {
 	$companysymbol = "AAPL";
 }
 
+echo '<script src="Chart.js"></script>';
+
 $stockQuotes = simplexml_load_file('http://www.google.com/ig/api?stock=' . $companysymbol);
 $companyname = "";
 
