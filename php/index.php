@@ -6,7 +6,10 @@ if((isset($_POST['stockname']))) {
 	$companysymbol = "AAPL";
 }
 
-echo '<script src="Chart.js"></script>';
+echo <<<_END
+	<script src="jquery-2.0.3.min.js"></script>
+	<script src="Chart.js"></script>
+_END;
 
 $stockQuotes = simplexml_load_file('http://www.google.com/ig/api?stock=' . $companysymbol);
 $companyname = "";
@@ -16,9 +19,19 @@ foreach ($stockQuotes as $Acc_info):
 endforeach;
 
 echo <<<_END
-			<form method='post' action='index.php'>
-			<textarea name="stockname" cols="20" rows="1" wrap="hard" maxlength="100"></textarea></br>
-			<input type='submit' value='search' /></form>
+		<html>
+		<head>
+		<link href="style.css" rel="stylesheet" type="text/css">
+		<title>Money Vs People</title>
+		<div id="container">
+		
+		<div id="searchbar">
+		<form method='post' action='index.php'>
+		<textarea name="stockname" cols="20" rows="1" wrap="hard" maxlength="100"></textarea></br>
+		<input type='submit' value='search'/></form>
+		</div>
+		
+		<div id="graph">
 _END;
 
 echo 'Company symbol : ' . $companysymbol . '</br>';
@@ -29,16 +42,156 @@ $historystock = file_get_contents("http://ichart.yahoo.com/table.csv?s=" . $comp
 $historystock = str_replace("\n", "," , $historystock);
 $historystock = explode(",", $historystock);
 
-for($i=0; $i<count($historystock)-1; $i+=7) {
-	echo '<table border="1">';
-	echo '<tr>';
-	echo '<td>';
-	echo $historystock[$i + 0] .'&nbsp;';
-	echo '</td>';
-	echo '<td>';
-	echo $historystock[$i + 6] .'&nbsp;';
-	echo '</td>';
-	echo '</tr>';
-	echo '</table>';
+$dates = array("");
+$prices = array("");
+
+for($i=0; $i<count($historystock)-1; $i+=14) {
+	array_unshift($dates, $historystock[$i + 0]);
+	array_unshift($prices, $historystock[$i + 6]);
 }
+$highestprice = 0;
+foreach($prices as $price) :
+	if($price > $highestprice && $price != "Adj Close") $highestprice = $price;
+endforeach;
+$highestprice = $highestprice/10;
+for($i=0; $i<count($dates)-1; $i+=1) {
+	if($i%12!=0) $dates[$i]="_"; else $dates[$i] = substr($dates[$i], 0, 4);
+}
+echo <<<_END
+	<canvas id="myChart" width="1300" height="800"></canvas>
+	
+	<script>
+		var ctx = document.getElementById("myChart").getContext("2d");
+		
+		var data = {
+			labels : [
+_END;
+		foreach($dates as $date) :
+					if($date != "Date" && $date != "") {
+						if($date == $dates[count($dates)-1]) {
+							echo '"' . $date . '"';
+						} else {
+							echo '"' . $date . '"' . ",";
+						}
+					}
+		endforeach;
+		echo'],';
+echo <<<_END
+			datasets : [
+				{
+					fillColor : "rgba(151,187,205,0.3)",
+					strokeColor : "rgba(255,255,255,1)",
+					pointColor : "rgba(151,187,205,1)",
+					pointStrokeColor : "#fff",
+					data : [
+_END;
+		foreach($prices as $price) :
+					if($price != "Adj Close" && $price != "") {
+						if($price == $prices[count($prices)-1]) {
+							echo $price;
+						} else {
+							echo $price . ",";
+						}
+					}
+		endforeach;
+		echo']';
+echo <<<_END
+				}
+			]
+		}
+		
+		var options = {			
+		//Boolean - If we show the scale above the chart data			
+		scaleOverlay : true,
+		
+		//Boolean - If we want to override with a hard coded scale
+		scaleOverride : true,
+		
+		//** Required if scaleOverride is true **
+		//Number - The number of steps in a hard coded scale
+		scaleSteps : 10,
+		//Number - The value jump in the hard coded scale
+		scaleStepWidth : 
+_END;
+		echo $highestprice;
+echo <<<_END
+		,
+		//Number - The scale starting value
+		scaleStartValue : 0,
+
+		//String - Colour of the scale line	
+		scaleLineColor : "rgba(255,255,255,1)",
+		
+		//Number - Pixel width of the scale line	
+		scaleLineWidth : 1,
+
+		//Boolean - Whether to show labels on the scale	
+		scaleShowLabels : true,
+		
+		//Interpolated JS string - can access value
+		scaleLabel : "<%=value%>",
+		
+		//String - Scale label font declaration for the scale label
+		scaleFontFamily : "'Arial'",
+		
+		//Number - Scale label font size in pixels	
+		scaleFontSize : 12,
+		
+		//String - Scale label font weight style	
+		scaleFontStyle : "normal",
+		
+		//String - Scale label font colour	
+		scaleFontColor : "#666",	
+		
+		///Boolean - Whether grid lines are shown across the chart
+		scaleShowGridLines : true,
+		
+		//String - Colour of the grid lines
+		scaleGridLineColor : "rgba(0,0,0,.07)",
+		
+		//Number - Width of the grid lines
+		scaleGridLineWidth : 1,	
+		
+		//Boolean - Whether the line is curved between points
+		bezierCurve : false,
+		
+		//Boolean - Whether to show a dot for each point
+		pointDot : false,
+		
+		//Number - Radius of each point dot in pixels
+		pointDotRadius : 3,
+		
+		//Number - Pixel width of point dot stroke
+		pointDotStrokeWidth : 1,
+		
+		//Boolean - Whether to show a stroke for datasets
+		datasetStroke : true,
+		
+		//Number - Pixel width of dataset stroke
+		datasetStrokeWidth : 3,
+		
+		//Boolean - Whether to fill the dataset with a colour
+		datasetFill : true,
+		
+		//Boolean - Whether to animate the chart
+		animation : true,
+
+		//Number - Number of animation steps
+		animationSteps : 60,
+		
+		//String - Animation easing effect
+		animationEasing : "easeOutQuart",
+
+		//Function - Fires when the animation is complete
+		onAnimationComplete : null
+	}
+	var MyNewChart = new Chart(ctx).Line(data, options);
+	</script>
+_END;
+
+echo <<<_END
+	</div>
+	</head>
+	</html>
+_END;
 ?>
