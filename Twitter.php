@@ -23,11 +23,11 @@ curl_setopt($Resource,CURLOPT_POSTFIELDS, $AuthField);
 
 curl_setopt($Resource, CURLOPT_RETURNTRANSFER,1); 
 $result=curl_exec($Resource);
-if($result==FALSE)echo "Failed to retrieve data\n";
+if($result==FALSE)die("");
 else
 {
 $data=ParseJSON($result);
-if($data==false)echo "Failed to parse JSON\n";
+if($data==false)die("");
 
 if($data["token_type"]=="bearer")
 {
@@ -39,7 +39,7 @@ curl_setopt($Resource, CURLOPT_HTTPHEADER,$AuthorizationHeader);
 curl_setopt($Resource, CURLOPT_RETURNTRANSFER,1); 
 $result=curl_exec($Resource);
 $Tweets=ParseJSON($result);
-if($Tweets==false)echo "Failed to parse tweets\n";
+if($Tweets==false)die("");
 $ReturnVal="";
 for($i=0;$i<count($Tweets["statuses"]);$i++)
 {
@@ -52,7 +52,7 @@ echo $ReturnVal;
 }
 else
 {
-echo "Twitter did not return access token";
+die("");
 };
 }
 ?>
