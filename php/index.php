@@ -1,30 +1,48 @@
 <?php
-$companysymbol = "";
-if((isset($_POST['stockname']))) {
-	$companysymbol = $_POST['stockname'];	
+$companyname = "";
+$product = "";
+if((isset($_GET['stockname']))) {
+	$companyname = $_GET['stockname'];	
 } else {
-	$companysymbol = "AAPL";
+	$companyname = "apple";
 }
+$product = "";
+if((isset($_GET['product']))) {
+	$product = $_GET['product'];
+}
+/*
+$product = str_replace(" ", "%20", $product);
+//$newsstories = file_get_contents("https://www.google.com/trends/fetchComponent?q=" . $product . "&cid=TIMESERIES_GRAPH_0&export=3");
+$popularity = file_get_contents("chromebook.txt");
+$popularity = substr($popularity, 63, -2);
+$popularity = str_replace("new Date(", '"', $popularity);
+$popularity = str_replace(")", '"', $popularity);
 
+$popularityjson = json_decode($popularity, true);
+foreach($popularityjson['table']['rows'] as $c) :
+	echo $c['c'][0]['v'] . " , ";
+	echo $c['c'][1]['v'] . "  ,  ";
+endforeach;
+*/
+
+/*
 echo <<<_END
 	<script src="jquery-2.0.3.min.js"></script>
 	<script src="Chart.js"></script>
 _END;
+*/
 
-$stockQuotes = simplexml_load_file('http://www.google.com/ig/api?stock=' . $companysymbol);
-$companyname = "";
+$companydatajson = substr(file_get_contents("http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=" . $companyname ."&&callback=YAHOO.Finance.SymbolSuggest.ssCallback"), 39,-1);
+$companydata = json_decode($companydatajson, true);
+$companysymbol = $companydata['ResultSet']['Result'][0]['symbol'];
 
-foreach ($stockQuotes as $Acc_info):
-	$companyname = (string)$Acc_info->company['data'];
-endforeach;
-
+/*
 echo <<<_END
 		<html>
 		<head>
 		<link href="style.css" rel="stylesheet" type="text/css">
 		<title>Money Vs People</title>
-		<div id="container">
-		
+		<div id="container">	
 		<div id="searchbar">
 		<form method='post' action='index.php'>
 		<textarea name="stockname" cols="20" rows="1" wrap="hard" maxlength="100"></textarea></br>
@@ -36,6 +54,7 @@ _END;
 
 echo 'Company symbol : ' . $companysymbol . '</br>';
 echo 'Company name : ' . $companyname . '</br>';
+*/
 
 $historystock = file_get_contents("http://ichart.yahoo.com/table.csv?s=" . $companysymbol . "&a=0&b=1&c=2000&d=7&e=11&f=2013&g=w&ignore=.csv");
 
@@ -57,12 +76,14 @@ $highestprice = $highestprice/10;
 for($i=0; $i<count($dates)-1; $i+=1) {
 	if($i%12!=0) $dates[$i]="_"; else $dates[$i] = substr($dates[$i], 0, 4);
 }
+/*
 echo <<<_END
 	<canvas id="myChart" width="1300" height="800"></canvas>
 	
 	<script>
 		var ctx = document.getElementById("myChart").getContext("2d");
-		
+		*/
+echo <<<_END
 		var data = {
 			labels : [
 _END;
@@ -94,12 +115,30 @@ _END;
 						}
 					}
 		endforeach;
+		echo']}';
+		/*
+		echo <<<_END
+				{
+					fillColor : "rgba(151,187,205,0.3)",
+					strokeColor : "rgba(255,255,255,1)",
+					pointColor : "rgba(151,187,205,1)",
+					pointStrokeColor : "#fff",
+					data : [
+_END;
+		foreach($prices as $price) :
+					if($price != "Adj Close" && $price != "") {
+						if($price == $prices[count($prices)-1]) {
+							echo "100";
+						} else {
+							echo "100,";
+						}
+					}
+		endforeach;
 		echo']';
 echo <<<_END
 				}
 			]
 		}
-		
 		var options = {			
 		//Boolean - If we show the scale above the chart data			
 		scaleOverlay : true,
@@ -123,7 +162,7 @@ echo <<<_END
 		scaleLineColor : "rgba(255,255,255,1)",
 		
 		//Number - Pixel width of the scale line	
-		scaleLineWidth : 1,
+		scaleLineWidth : 3,
 
 		//Boolean - Whether to show labels on the scale	
 		scaleShowLabels : true,
@@ -150,7 +189,7 @@ echo <<<_END
 		scaleGridLineColor : "rgba(0,0,0,.07)",
 		
 		//Number - Width of the grid lines
-		scaleGridLineWidth : 1,	
+		scaleGridLineWidth : 40,	
 		
 		//Boolean - Whether the line is curved between points
 		bezierCurve : false,
@@ -194,4 +233,5 @@ echo <<<_END
 	</head>
 	</html>
 _END;
+*/
 ?>
