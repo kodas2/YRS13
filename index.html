@@ -27,24 +27,26 @@
 		var chartIsStillLoading = false;
 		var loadingImageInterval = 0;
 		var showLoadingImageRetryInterval = 0;
+		var currentTweets = [];
+		var tweetCounter = 0;
 	
-		function displayTweets(tweetssplitted) {
-			result = [];
-			for(var i in tweetssplitted) {
-				result.push([i, tweetssplitted[i]]);
-			}
-				
-			for(var i=0; i<result.length; i++) {
+		function displayTweets() {
+			for(var i=0; i<3; i++) {
 				var tweet = document.createElement("div");
-				$(tweet).attr("class", "tweet").html(tweetssplitted[i]);
+				$(tweet).attr("class", "tweet").html(currentTweets[i]);
 				$("#tweets").append(tweet);
+				tweetCounter++;
 			}
+			$(".tweet").on("transitionend", function(eventObj) {
+				var xchange = Math.floor(Math.random());
+			});
 		}
 		function getTweets(searchProductName) {
 			ajaxReq("Twitter.php?q=" + searchProductName, 
 			function(tweets) {
 				var tweetssplitted = $.parseJSON(tweets);
-				displayTweets(tweetssplitted);
+				window.currentTweets = tweetssplitted;
+				displayTweets();
 			});
 		}
 		//For the swirly image
@@ -52,9 +54,9 @@
 			if (hasUpdatedChart) {
 				var loadingImage = document.createElement("img");
 				var loadingText = document.createElement("span");
-				$(loadingImage).attr("id", "loadingImage");
+				$(loadingImage).attr("id", "loadingImage").attr("src", "loadingImage.png");
 				$(loadingText).attr("id", "loadingText");
-				$(loadingText).attr("class", "bgText");
+				$(loadingText).attr("class", "bgText").html("Loading...");
 
 				var loadingContainer = document.createElement("div");
 				$(loadingContainer).attr("id", "loadingContainer");
@@ -100,7 +102,7 @@
 		function drawChart() {
 			if ($("#searchBar").value != "") {
 				updateForNewChart();
-				//window.showLoadingImageRetryInterval = setInterval(showLoadingImage, 100);
+				window.showLoadingImageRetryInterval = setInterval(showLoadingImage, 100);
 				var searchProductName = $("#searchBar").val();
 				chartIsStillLoading = true;
 				ajaxReq("getCompanyFromProductName.php?product=" + searchProductName, function(responseCompanyName) {
@@ -108,7 +110,7 @@
 					ajaxReq("getChartInfo.php?stockname=" + responseCompanyName, function(responseChartInfo) {
 						eval(responseChartInfo);
 
-						//$("#loadingContainer").remove();
+						$("#loadingContainer").remove();
 						$("#chartCanvas").attr("width", $("#chartContainerCurrent").width())
 						$("#chartCanvas").attr("height", $("#chartContainerCurrent").height() - 40);
 						var ctx = document.getElementById("chartCanvas").getContext("2d");
