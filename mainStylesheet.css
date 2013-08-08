@@ -141,5 +141,6 @@ body {
 	-o-transition: all 3s;
 	transition: all 3s;
 	width: 80%;
+	border: 2px solid;
 	/*position: relative;*/
 }
