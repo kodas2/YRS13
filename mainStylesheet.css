@@ -80,12 +80,14 @@ body {
 	top: 30%;
 }
 #chartCanvas {
+	position: relative;
+	top: 2%;
 	width: 100%;
 	height: 100%;
 }
 #chartContainerCurrent {
 	width: 50%;
-	height: 66%;
+	height: 63%;
 	top: -70%;
 	left: 25%;
 	position: fixed;
@@ -101,7 +103,7 @@ body {
 }
 #chartContainerOld {
 	width: 50%;
-	height: 66%;
+	height: 63%;
 	top: 35%;
 	left: 25%;
 	position: fixed;
