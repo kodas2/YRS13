@@ -92,6 +92,11 @@
 				ajaxReq("getCompanyFromProductName.php?product=" + searchProductName, function(responseCompanyName) {
 					ajaxReq("getChartInfo.php?stockname=" + responseCompanyName, function(responseChartInfo) {
 						eval(responseChartInfo);
+
+						$("#loadingContainer").remove();
+						$("#chartCanvas").remove();
+						$("#chartContainerCurrent").html("<canvas id=\"chartCanvas\"></canvas>");
+
 						var ctx = document.getElementById("chartCanvas").getContext("2d");
 						var options = {			
 						//Boolean - If we show the scale above the chart data			
@@ -177,12 +182,8 @@
 
 					var retryChartDraw = setInterval(function() {
 						if (hasUpdatedChart) {
-							$("#loadingContainer").remove();
-							$("#chartCanvas").css("width", "100%").removeAttr("height");
-							$("#chartCanvas").css("height", "100%").removeAttr("height");
-							setTimeout(function() {
-								var MyNewChart = new Chart(ctx).Line(data, options);
-							}, 100);
+							var MyNewChart = new Chart(ctx).Line(data, options);
+
 							//Cancel interval.
 							clearInterval(retryChartDraw);
 						}
