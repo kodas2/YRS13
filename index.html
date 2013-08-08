@@ -180,7 +180,9 @@
 							$("#loadingContainer").remove();
 							$("#chartCanvas").css("width", "100%");
 							$("#chartCanvas").css("height", "100%");
-							var MyNewChart = new Chart(ctx).Line(data, options);
+							setTimeout(function() {
+								var MyNewChart = new Chart(ctx).Line(data, options);
+							}, 100);
 							//Cancel interval.
 							clearInterval(retryChartDraw);
 						}
