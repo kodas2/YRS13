@@ -18,10 +18,8 @@
 			</form>
 		</div>
 	</div>
-	<div id="mainContainer">
-		<div id="chartContainerCurrent">
-			<canvas id="chartCanvas"></canvas>
-		</div>
+	<div id="chartContainerCurrent">
+		<canvas id="chartCanvas"></canvas>
 	</div>
 	<script>
 		var hasUpdatedChart = true;
@@ -61,20 +59,16 @@
 			var newChartCanvas = document.createElement("canvas");
 			newChartCanvas.setAttribute("id", "chartCanvas");
 			newChartContainer.appendChild(newChartCanvas);
-			mainContainer.appendChild(newChartContainer);
+			$("body").append(newChartContainer);
 
 			//Most browsers
 			$("#chartContainerCurrent").on("transitionend", function(eventObj) {
-				var oldChartContainer = document.getElementById("chartContainerOld");
-				var mainContainer = document.getElementById("mainContainer");
-				mainContainer.removeChild(oldChartContainer);
+				$("#chartContainerOld").remove();
 				hasUpdatedChart = true;
 			});
 			//Chrome and Safari
 			$("#chartContainerCurrent").on("webkitTransitionEnd", function(eventObj) {
-				var oldChartContainer = document.getElementById("chartContainerOld");
-				var mainContainer = document.getElementById("mainContainer");
-				mainContainer.removeChild(oldChartContainer);
+				$("#chartContainerOld").remove();
 				hasUpdatedChart = true;
 			});
 
@@ -86,18 +80,15 @@
 		function drawChart() {
 			if ($("#searchBar").value != "") {
 				updateForNewChart();
-				window.showLoadingImageRetryInterval = setInterval(showLoadingImage, 100);
+				//window.showLoadingImageRetryInterval = setInterval(showLoadingImage, 100);
 				var searchProductName = $("#searchBar").val();
 				chartIsStillLoading = true;
 				ajaxReq("getCompanyFromProductName.php?product=" + searchProductName, function(responseCompanyName) {
 					ajaxReq("getChartInfo.php?stockname=" + responseCompanyName, function(responseChartInfo) {
 						eval(responseChartInfo);
-						alert(responseCompanyName);
 
-						$("#loadingContainer").remove();
-						$("#chartCanvas").remove();
-						$("#chartContainerCurrent").html("<canvas id=\"chartCanvas\"></canvas>");
-
+						//$("#loadingContainer").remove();
+						$("#chartCanvas").css("height", "100%").css("width", "100%").removeAttr("height").removeAttr("width");
 						var ctx = document.getElementById("chartCanvas").getContext("2d");
 						var options = {			
 						//Boolean - If we show the scale above the chart data			
