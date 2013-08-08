@@ -26,26 +26,7 @@
 		var chartIsStillLoading = false;
 		var loadingImageInterval = 0;
 		var showLoadingImageRetryInterval = 0;
-		
-		function displayTweets(tweetssplitted) {
-			result = [];
-			for(var i in tweetssplitted) {
-				result.push([i, tweetssplitted[i]]);
-			}
-				
-			for(var i=0; i<result.length; i++) {
-				var tweet = document.createElement("div");
-				$(tweet).attr("class", "tweet").html(tweetssplitted[i]);
-				$("#tweets").append(tweet);
-			}
-		}
-		function getTweets(searchProductName) {
-			ajaxReq("Twitter.php?q=" + searchProductName, 
-			function(tweets) {
-				var tweetssplitted = $.parseJSON(tweets);
-				displayTweets(tweetssplitted);
-			});
-		}
+
 		//For the swirly image
 		function showLoadingImage() {
 			if (hasUpdatedChart) {
@@ -103,10 +84,9 @@
 				var searchProductName = $("#searchBar").val();
 				chartIsStillLoading = true;
 				ajaxReq("getCompanyFromProductName.php?product=" + searchProductName, function(responseCompanyName) {
-					getTweets(searchProductName);
 					ajaxReq("getChartInfo.php?stockname=" + responseCompanyName, function(responseChartInfo) {
 						eval(responseChartInfo);
-					
+
 						//$("#loadingContainer").remove();
 						$("#chartCanvas").attr("width", $("#chartContainerCurrent").width())
 						$("#chartCanvas").attr("height", $("#chartContainerCurrent").height() - 40);
