@@ -92,6 +92,7 @@
 				ajaxReq("getCompanyFromProductName.php?product=" + searchProductName, function(responseCompanyName) {
 					ajaxReq("getChartInfo.php?stockname=" + responseCompanyName, function(responseChartInfo) {
 						eval(responseChartInfo);
+						alert(responseCompanyName);
 
 						$("#loadingContainer").remove();
 						$("#chartCanvas").remove();
