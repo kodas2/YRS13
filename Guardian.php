@@ -6,6 +6,8 @@
 	$URL="http://content.guardianapis.com/search?q=$Company%20$Product&from-date=$Year-01-01&to-date=$NextYear-01-01&format=json&api-key=dgzwv7yyec5yqmyu4zzgd794";
 	$Resource=curl_init($URL);
 	curl_setopt($Resource, CURLOPT_RETURNTRANSFER,1); 
+	curl_setopt($Resource, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($Resource, CURLOPT_SSL_VERIFYPEER, false);
 	$result=curl_exec($Resource);
 	$data=json_decode($result,true);
 		if($data==false)echo "ERROR";

@@ -16,6 +16,8 @@ $AuthRequest[1]="Content-Type: application/x-www-form-urlencoded;charset=UTF-8";
 
 $AuthField="grant_type=client_credentials";
 $Resource=curl_init("https://api.twitter.com/oauth2/token");
+curl_setopt($Resource, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($Resource, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($Resource, CURLOPT_HTTPHEADER,$AuthRequest);
 curl_setopt($Resource, CURLOPT_POST,1);
 curl_setopt($Resource,CURLOPT_POSTFIELDS, $AuthField);
@@ -34,6 +36,8 @@ $AuthorizationHeader=array();
 $AuthorizationHeader[0]="Authorization: Bearer ".$data["access_token"];
 $Query=urlencode("\"".$_GET["q"]."\" lang:en");
 $Resource=curl_init("https://api.twitter.com/1.1/search/tweets.json?q=$Query");
+curl_setopt($Resource, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($Resource, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($Resource, CURLOPT_HTTPHEADER,$AuthorizationHeader);
 curl_setopt($Resource, CURLOPT_RETURNTRANSFER,1); 
 $result=curl_exec($Resource);
