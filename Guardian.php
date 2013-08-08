@@ -8,7 +8,7 @@ require("parseJson.php");
 	$Resource=curl_init($URL);
 	curl_setopt($Resource, CURLOPT_RETURNTRANSFER,1); 
 	$result=curl_exec($Resource);
-	$data=parseJSON($result);
+	$data=json_decode($result,true);
 		if($data==false)echo "ERROR";
 		$json="";
 		for($i=0;$i<count($data["response"]["results"]);$i++)

@@ -26,7 +26,7 @@ $result=curl_exec($Resource);
 if($result==FALSE)die("");
 else
 {
-$data=ParseJSON($result);
+$data=json_decode($result,true);
 if($data==false)die("");
 
 if($data["token_type"]=="bearer")
@@ -38,7 +38,7 @@ $Resource=curl_init("https://api.twitter.com/1.1/search/tweets.json?q=$Query");
 curl_setopt($Resource, CURLOPT_HTTPHEADER,$AuthorizationHeader);
 curl_setopt($Resource, CURLOPT_RETURNTRANSFER,1); 
 $result=curl_exec($Resource);
-$Tweets=ParseJSON($result);
+$Tweets=json_decode($result,true);
 if($Tweets==false)die("");
 $ReturnVal="";
 for($i=0;$i<count($Tweets["statuses"]);$i++)
