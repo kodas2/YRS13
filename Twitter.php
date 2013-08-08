@@ -1,5 +1,4 @@
 <?php
-require_once("parseJson.php");
 //1234567890
 //@TEST4632 
 //testword

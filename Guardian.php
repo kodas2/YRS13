@@ -1,5 +1,4 @@
 <?php
-require("parseJson.php");
 
 	function queryYear($Company,$Product,$Year,&$FirstOne)
 	{
