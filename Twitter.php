@@ -26,28 +26,29 @@ $result=curl_exec($Resource);
 if($result==FALSE)die("");
 else
 {
-$data=ParseJSON($result);
+$data=json_decode($result,true);
 if($data==false)die("");
 
 if($data["token_type"]=="bearer")
 {
 $AuthorizationHeader=array();
 $AuthorizationHeader[0]="Authorization: Bearer ".$data["access_token"];
-$Query=urlencode($_GET["q"]." lang:en");
+$Query=urlencode("\"".$_GET["q"]."\" lang:en");
 $Resource=curl_init("https://api.twitter.com/1.1/search/tweets.json?q=$Query");
 curl_setopt($Resource, CURLOPT_HTTPHEADER,$AuthorizationHeader);
 curl_setopt($Resource, CURLOPT_RETURNTRANSFER,1); 
 $result=curl_exec($Resource);
-$Tweets=ParseJSON($result);
+$Tweets=json_decode($result,true);
 if($Tweets==false)die("");
 $ReturnVal="";
 for($i=0;$i<count($Tweets["statuses"]);$i++)
 {
 if($i==0)
-$ReturnVal=$Tweets["statuses"][$i]["text"];
+$ReturnVal="[\"".addcslashes($Tweets["statuses"][$i]["text"],'"\\\'')."\"";
 else
-$ReturnVal=$ReturnVal."XKJRBN".$Tweets["statuses"][$i]["text"];
+$ReturnVal=$ReturnVal.",\"".addcslashes($Tweets["statuses"][$i]["text"],'"\\\'')."\"";
 }
+$ReturnVal=$ReturnVal."]";
 echo $ReturnVal;
 }
 else
