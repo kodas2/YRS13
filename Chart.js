@@ -876,7 +876,7 @@ window.Chart = function(context){
 				ctx.textAlign = "center";
 			}
 			ctx.fillStyle = config.scaleFontColor;
-			for (var i=0; i<data.labels.length; i=i+11){
+			for (var i=0; i<data.labels.length; i=i+12){
 				ctx.save();
 				if (rotateLabels > 0){
 					ctx.translate(yAxisPosX + i*valueHop,xAxisPosY + config.scaleFontSize);
@@ -884,7 +884,7 @@ window.Chart = function(context){
 					ctx.fillText(data.labels[i], 0,0);
 					ctx.restore();
 				}
-				
+				 
 				else{
 					ctx.fillText(data.labels[i], yAxisPosX + i*valueHop,xAxisPosY + config.scaleFontSize+3);					
 				}
@@ -948,7 +948,7 @@ window.Chart = function(context){
 				longestText +=10;
 			}
 			xAxisLength = width - longestText - widestXLabel;
-			valueHop = Math.floor(xAxisLength/(data.labels.length-1));	
+			valueHop = xAxisLength/(data.labels.length-1);
 				
 			yAxisPosX = width-widestXLabel/2-xAxisLength;
 			xAxisPosY = scaleHeight + config.scaleFontSize/2;				
