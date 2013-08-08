@@ -33,13 +33,33 @@
 		function displayTweets() {
 			for(var i=0; i<3; i++) {
 				var tweet = document.createElement("div");
-				$(tweet).attr("class", "tweet").html(currentTweets[i]);
+				$(tweet).attr("class", "tweet").html(currentTweets[i]);//.css("left", i * 75).css("top", i * 75);
 				$("#tweets").append(tweet);
+
 				tweetCounter++;
 			}
 			$(".tweet").on("transitionend", function(eventObj) {
-				var xchange = Math.floor(Math.random());
+				var xchange = Math.floor((Math.random() * 10) - 5);
+				var ychange = Math.floor((Math.random() * 10) - 5);
+
+				currentL = $(eventObj.target).css("left");
+				currentT = $(eventObj.target).css("top");
+
+				$(eventObj.target).css("left", currentL + xchange);
+				$(eventObj.target).css("top", currentT + ychange);
 			});
+			$(".tweet").on("webkitTransitionEnd", function(eventObj) {
+				var xchange = Math.floor((Math.random() * 10) - 5);
+				var ychange = Math.floor((Math.random() * 10) - 5);
+
+				var pos = $(eventObj.target).position();
+
+				$(eventObj.target).css("left", pos.left + xchange);
+				$(eventObj.target).css("top", pos.top + ychange);
+			});
+
+			$(".tweet").trigger("transitionend");
+			$(".tweet").trigger("webkitTransitionEnd");
 		}
 		function getTweets(searchProductName) {
 			ajaxReq("Twitter.php?q=" + searchProductName, 
