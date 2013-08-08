@@ -19,14 +19,76 @@
 		</div>
 	</div>
 	<div id="mainContainer">
-		<div id="chartContainer">
-			<canvas id="chartCanvas" height="400" width="1130"></canvas>
+		<div id="chartContainerCurrent">
+			<canvas id="chartCanvas"></canvas>
 		</div>
 	</div>
 	<script>
+		var hasUpdatedChart = true;
+		var chartIsStillLoading = false;
+		var loadingImageInterval = 0;
+		var showLoadingImageRetryInterval = 0;
+
+		//For the swirly image
+		function showLoadingImage() {
+			if (hasUpdatedChart) {
+				var loadingImage = document.createElement("img");
+				var loadingText = document.createElement("span");
+				$(loadingImage).attr("id", "loadingImage");
+				$(loadingText).attr("id", "loadingText");
+				$(loadingText).attr("class", "bgText");
+
+				var loadingContainer = document.createElement("div");
+				$(loadingContainer).attr("id", "loadingContainer");
+				$(loadingContainer).append(loadingImage);
+				$(loadingContainer).append(loadingText);
+
+				$("#chartContainerCurrent").append(loadingContainer);
+
+				//TODO: Set loadingImageInterval to rotate the loading image
+
+				cancelInterval(showLoadingImageRetryInterval);
+				showLoadingImageRetryInterval = 0;
+			}
+		}
+
+		function updateForNewChart() {
+			hasUpdatedChart = false;
+			//Set current div's id to something else, so we don't have conflicts
+			$("#chartContainerCurrent").attr("id", "chartContainerOld");
+			var newChartContainer = document.createElement("div");
+			newChartContainer.setAttribute("id", "chartContainerCurrent");
+			var newChartCanvas = document.createElement("canvas");
+			newChartCanvas.setAttribute("id", "chartCanvas");
+			newChartContainer.appendChild(newChartCanvas);
+			mainContainer.appendChild(newChartContainer);
+
+			//Most browsers
+			$("#chartContainerCurrent").on("transitionend", function(eventObj) {
+				var oldChartContainer = document.getElementById("chartContainerOld");
+				var mainContainer = document.getElementById("mainContainer");
+				mainContainer.removeChild(oldChartContainer);
+				hasUpdatedChart = true;
+			});
+			//Chrome and Safari
+			$("#chartContainerCurrent").on("webkitTransitionEnd", function(eventObj) {
+				var oldChartContainer = document.getElementById("chartContainerOld");
+				var mainContainer = document.getElementById("mainContainer");
+				mainContainer.removeChild(oldChartContainer);
+				hasUpdatedChart = true;
+			});
+
+			setTimeout(function() {
+				$("#chartContainerCurrent").css("top", "36%");
+			}, 100);
+		}
+
 		function drawChart() {
 			if ($("#searchBar").value != "") {
+				updateForNewChart();
+				showLoadingImageRetryInterval = setInterval(showLoadingImage, 100);
 				var searchProductName = $("#searchBar").val();
+				chartIsStillLoading = true;
 				ajaxReq("getCompanyFromProductName.php?product=" + searchProductName, function(responseCompanyName) {
 					ajaxReq("getChartInfo.php?stockname=" + responseCompanyName, function(responseChartInfo) {
 						eval(responseChartInfo);
@@ -113,15 +175,23 @@
 						onAnimationComplete : null
 					}
 
-					var MyNewChart = new Chart(ctx).Line(data, options);
+					var retryChartDraw = setInterval(function() {
+						if (hasUpdatedChart) {
+							var MyNewChart = new Chart(ctx).Line(data, options);
+							//Cancel interval.
+							//cancelTimeout(retryChartDraw);
+						}
+					}, 100);
 					});
 				});
+				chartIsStillLoading = false;
 			}
 		}
 		//Animates the seachbar
 		$(function() {
 			$("#searchBarContainer").css("top", "25%");
 			$("#titleBar").css("top", "0px");
+			$("#chartContainerCurrent").css("top", "36%");
 		});
 		$("#searchForm").submit(function() {
 			setTimeout(drawChart, 100);
