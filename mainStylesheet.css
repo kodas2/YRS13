@@ -97,6 +97,7 @@ body {
 	border-radius: 5px 5px 5px 5px;
 	box-shadow: 0px 0px 15px #BABA7C;
 	text-align: center;
+	z-index: 0;
 }
 #chartContainerOld {
 	width: 50%;
