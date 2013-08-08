@@ -88,7 +88,7 @@
 						eval(responseChartInfo);
 
 						//$("#loadingContainer").remove();
-						$("#chartCanvas").css("height", "100%").css("width", "100%").removeAttr("height").removeAttr("width");
+						$("#chartCanvas").attr("width", $("#chartContainerCurrent").width())
 						var ctx = document.getElementById("chartCanvas").getContext("2d");
 						var options = {			
 						//Boolean - If we show the scale above the chart data			
