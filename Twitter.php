@@ -43,16 +43,12 @@ curl_setopt($Resource, CURLOPT_RETURNTRANSFER,1);
 $result=curl_exec($Resource);
 $Tweets=json_decode($result,true);
 if($Tweets==false)die("");
-$ReturnVal="";
+$Data=array();
 for($i=0;$i<count($Tweets["statuses"]);$i++)
 {
-if($i==0)
-$ReturnVal="[\"".addcslashes($Tweets["statuses"][$i]["text"],'"\\\'')."\"";
-else
-$ReturnVal=$ReturnVal.",\"".addcslashes($Tweets["statuses"][$i]["text"],'"\\\'')."\"";
+$Data[$i]=$Tweets["statuses"][$i]["text"];
 }
-$ReturnVal=$ReturnVal."]";
-echo $ReturnVal;
+echo json_encode($Data);
 }
 else
 {
