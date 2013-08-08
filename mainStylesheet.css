@@ -129,3 +129,16 @@ body {
 	85% {width: 54%; height: 70%; top: 30%;}
 	100% {width: 50%; height: 66%; top: 35%;}
 }
+#tweets {
+	background-color: 000000;
+	color: FFFFFF;
+	position: relative;
+	top: 36%;
+	left: 0px;
+	width: 25%;
+	height: 66%;
+}
+.tweet {
+	background-color: FFFFFF;
+	color: 00FF00;
+}
