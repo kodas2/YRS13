@@ -876,7 +876,7 @@ window.Chart = function(context){
 				ctx.textAlign = "center";
 			}
 			ctx.fillStyle = config.scaleFontColor;
-			for (var i=0; i<data.labels.length; i=i+3){
+			for (var i=0; i<data.labels.length; i=i+6){
 				ctx.save();
 				if (rotateLabels > 0){
 					ctx.translate(yAxisPosX + i*valueHop,xAxisPosY + config.scaleFontSize);

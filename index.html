@@ -177,6 +177,9 @@
 
 					var retryChartDraw = setInterval(function() {
 						if (hasUpdatedChart) {
+							$("#loadingContainer").remove();
+							$("#chartCanvas").css("width", "100%");
+							$("#chartCanvas").css("height", "100%");
 							var MyNewChart = new Chart(ctx).Line(data, options);
 							//Cancel interval.
 							clearInterval(retryChartDraw);

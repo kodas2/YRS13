@@ -115,7 +115,7 @@ _END;
 						}
 					}
 		endforeach;
-		echo']}';
+		echo']}]}';
 		/*
 		echo <<<_END
 				{
