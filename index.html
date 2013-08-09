@@ -3,6 +3,7 @@
 	<link rel="stylesheet" type="text/css" href="mainStylesheet.css" />
 	<title>MvP</title>
 	<script src="jquery-2.0.3.min.js"></script>
+	<script src="jquery.transit.min.js"></script>
 	<script src="Chart.js"></script>
 </head>
 <body>
@@ -29,37 +30,46 @@
 		var showLoadingImageRetryInterval = 0;
 		var currentTweets = [];
 		var tweetCounter = 0;
+		var tweetFloatInterval = 0;
+
+		function calculateTweetSpacing() {
+			var totalHeight = 0;
+			var noOfTweets = 0;
+
+			$(".tweet").each(function(i) {
+				totalHeight += $(this).height();
+				noOfTweets += 1;
+			}
+			alert(totalHeight);
+			var spacing = ($("#tweets").height() - totalHeight) / (noOfTweets > 2 ? noOfTweets - 1 : 1);
+			$(".tweet").next().css("margin-top", spacing);
+		}
 	
 		function displayTweets() {
+			$(".tweet").remove();
+
 			for(var i=0; i<3; i++) {
 				var tweet = document.createElement("div");
-				$(tweet).attr("class", "tweet").html(currentTweets[i]);//.css("left", i * 75).css("top", i * 75);
+				$(tweet).attr("class", "tweet").html(currentTweets[i]);
 				$("#tweets").append(tweet);
 
 				tweetCounter++;
 			}
-			/*$(".tweet").on("transitionend", function(eventObj) {
-				var xchange = Math.floor((Math.random() * 10) - 5);
-				var ychange = Math.floor((Math.random() * 10) - 5);
 
-				currentL = $(eventObj.target).css("left");
-				currentT = $(eventObj.target).css("top");
-
-				$(eventObj.target).css("left", currentL + xchange);
-				$(eventObj.target).css("top", currentT + ychange);
+			$(".tweet").on("hover", function() {
+				displayBinForTweet(this);
 			});
-			$(".tweet").on("webkitTransitionEnd", function(eventObj) {
-				var xchange = Math.floor((Math.random() * 10) - 5);
-				var ychange = Math.floor((Math.random() * 10) - 5);
 
-				var pos = $(eventObj.target).position();
+			calculateTweetSpacing();
 
-				$(eventObj.target).css("left", pos.left + xchange);
-				$(eventObj.target).css("top", pos.top + ychange);
-			});*/
+			/*window.tweetFloatInterval = setInterval(function() {
+				$(".tweet").each(function(index) {
+					var xchange = Math.floor((Math.random() * 10) - 5) * 2;
+					var ychange = Math.floor((Math.random() * 10) - 5) * 2;
 
-			$(".tweet").trigger("transitionend");
-			$(".tweet").trigger("webkitTransitionEnd");
+					$(this).transition({x: xchange, y: ychange}, 1000, 'steps(100)');
+				});
+			}, 1100);*/
 		}
 		function getTweets(searchProductName) {
 			ajaxReq("Twitter.php?q=" + searchProductName, 

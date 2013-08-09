@@ -56,7 +56,7 @@ echo 'Company symbol : ' . $companysymbol . '</br>';
 echo 'Company name : ' . $companyname . '</br>';
 */
 
-$historystock = file_get_contents("http://ichart.yahoo.com/table.csv?s=" . $companysymbol . "&a=0&b=1&c=2000&d=7&e=11&f=2013&g=w&ignore=.csv");
+$historystock = file_get_contents("http://ichart.yahoo.com/table.csv?s=" . $companysymbol . "&a=0&b=1&c=2010&d=7&e=11&f=2013&g=w&ignore=.csv");
 
 $historystock = str_replace("\n", "," , $historystock);
 $historystock = explode(",", $historystock);

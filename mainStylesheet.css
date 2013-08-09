@@ -117,7 +117,7 @@ body {
 	position: relative;
 	top: 33%;
 }
-@keyframes coverOldChart {
+/*@keyframes coverOldChart {
 	0% {width: 50%; height: 66%; top: -70%;}
 	75% {width: 50%; height: 66%; top: 30%;}
 	85% {width: 54%; height: 70%; top: 30%;}
@@ -128,7 +128,7 @@ body {
 	75% {width: 50%; height: 66%; top: 30%;}
 	85% {width: 54%; height: 70%; top: 30%;}
 	100% {width: 50%; height: 66%; top: 35%;}
-}
+}*/
 #tweets {
 	position: fixed;
 	top: 36%;
@@ -137,10 +137,14 @@ body {
 	height: 66%;
 }
 .tweet {
-	-webkit-transition: all 3s;
-	-o-transition: all 3s;
-	transition: all 3s;
 	width: 80%;
 	border: 2px solid;
-	/*position: relative;*/
+	position: relative;
+	margin-left: 10%;
+	height: auto;
+
+}
+.tweet:hover {
+	border: solid 2p ;/*add in light grey colour*/
+	border-radius: 5px 5px 5px 5px;
 }
