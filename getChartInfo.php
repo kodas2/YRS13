@@ -137,8 +137,8 @@ _END;
 		
 		echo <<<_END
 				{
-					fillColor : "rgba(151,187,205,0.3)",
-					strokeColor : "rgba(255,255,255,1)",
+					fillColor : "rgba(227,120,120,0.3)",
+					strokeColor : "rgba(0,0,0,1)",
 					pointColor : "rgba(151,187,205,1)",
 					pointStrokeColor : "#fff",
 					data : [
