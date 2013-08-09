@@ -121,9 +121,11 @@
 				$("#chartContainerCurrent").append(loadingContainer);
 
 				//TODO: Set loadingImageInterval to rotate the loading image
-				window.loadingImageInterval = setInterval(function() {
-					$("#loadingImage").transition({rotate:'18deg'});
-				}, 200);
+				if (loadingImageInterval == 0) {
+					window.loadingImageInterval = setInterval(function() {
+						$("#loadingImage").transition({rotate:'-18deg'}, 100);
+					}, 100);
+				}
 
 				clearInterval(window.showLoadingImageRetryInterval);
 				window.showLoadingImageRetryInterval = 0;
@@ -144,13 +146,13 @@
 			//Most browsers
 			$("#chartContainerCurrent").on("transitionend", function(eventObj) {
 				$("#chartContainerOld").remove();
+				hasUpdatedChart = true;
 			});
 			//Chrome and Safari
 			$("#chartContainerCurrent").on("webkitTransitionEnd", function(eventObj) {
 				$("#chartContainerOld").remove();
+				hasUpdatedChart = true;
 			});
-
-			hasUpdatedChart = true;
 
 			setTimeout(function() {
 				$("#chartContainerCurrent").css("top", "36%");
@@ -260,6 +262,7 @@
 
 							//Cancel interval.
 							clearInterval(retryChartDraw);
+							clearInterval(loadingImageInterval);
 						}
 					}, 100);
 					});
