@@ -80,6 +80,16 @@ $highestprice = 0;
 foreach($prices as $price) :
 	if($price > $highestprice && $price != "Adj Close") $highestprice = $price;
 endforeach;
+$highesttopsyday = 0;
+foreach($topsyarray as $topsy) :
+	if($topsy > $highesttopsyday) $highesttopsyday = $topsy;
+endforeach;
+
+$topsyadjust = $highestprice/$highesttopsyday;
+for($i=0; $i<count($topsyarray); $i++) {
+	$topsyarray[i] *= $topsyadjust;
+}
+
 $highestprice = $highestprice/10;
 for($i=0; $i<count($dates)-1; $i+=1) {
 	if($i%12!=0) $dates[$i]="_"; else $dates[$i] = substr($dates[$i], 0, 4);
