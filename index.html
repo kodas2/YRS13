@@ -31,6 +31,7 @@
 		var currentTweets = [];
 		var tweetCounter = 0;
 		var tweetFloatInterval = 0;
+		var hasShownInstruct = false;
 
 		function displayBinForTweet(tweetElem) {
 			if ($(tweetElem).children("img").length == 0) {
@@ -120,12 +121,16 @@
 
 				$("#chartContainerCurrent").append(loadingContainer);
 
+				var degRot = -360;
+
 				//TODO: Set loadingImageInterval to rotate the loading image
 				if (loadingImageInterval == 0) {
 					window.loadingImageInterval = setInterval(function() {
-						$("#loadingImage").transition({rotate:'-18deg'}, 100);
-					}, 100);
+						degRot = degRot - 360;
+						$("#loadingImage").transition({rotate:degRot}, 2000, 'linear');
+					}, 2000);
 				}
+				$("#loadingImage").transition({rotate:degRot}, 2000, 'linear');
 
 				clearInterval(window.showLoadingImageRetryInterval);
 				window.showLoadingImageRetryInterval = 0;
@@ -142,16 +147,29 @@
 			newChartCanvas.setAttribute("id", "chartCanvas");
 			newChartContainer.appendChild(newChartCanvas);
 			$("body").append(newChartContainer);
+			var hasShrunk = false;
 
 			//Most browsers
 			$("#chartContainerCurrent").on("transitionend", function(eventObj) {
 				$("#chartContainerOld").remove();
-				hasUpdatedChart = true;
+				if (hasShrunk == false) {
+					hasShrunk = true;
+					$("#chartContainerCurrent").css("left", "25%").css("width", "74%");
+				} else {
+					$("#chartContainerOld").remove();
+					hasUpdatedChart = true;
+				}
 			});
 			//Chrome and Safari
 			$("#chartContainerCurrent").on("webkitTransitionEnd", function(eventObj) {
 				$("#chartContainerOld").remove();
-				hasUpdatedChart = true;
+				if (hasShrunk == false) {
+					hasShrunk = true;
+					$("#chartContainerCurrent").css("left", "25%").css("width", "74%");
+				} else {
+					$("#chartContainerOld").remove();
+					hasUpdatedChart = true;
+				}
 			});
 
 			setTimeout(function() {

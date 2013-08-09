@@ -86,14 +86,14 @@ body {
 	height: 100%;
 }
 #chartContainerCurrent {
-	width: 75%;
+	width: 99%;
 	height: 63%;
 	top: -70%;
-	left: 25%;
+	left: 0%;
 	position: fixed;
-	-webkit-transition: top 3s, width 3s, height 3s;
-	-o-transition: top 3s, width 3s, height 3s;
-	transition: top 3s, width 3s, height 3s;
+	-webkit-transition: top 3s, width 3s, left 3s;
+	-o-transition: top 3s, width 3s, left 3s;
+	transition: top 3s, width 3s, left 3s;
 	background-color: #D4D4D4;
 	border: solid 2px #B2B2B2;
 	border-radius: 5px 5px 5px 5px;
@@ -102,10 +102,10 @@ body {
 	z-index: 0;
 }
 #chartContainerOld {
-	width: 75%;
+	width: 99%;
 	height: 63%;
 	top: 35%;
-	left: 25%;
+	left: 0%;
 	position: fixed;
 	background-color: #D4D4D4;
 	border: solid 2px #B2B2B2;
@@ -150,4 +150,7 @@ body {
 #loadingContainer {
 	position: relative;
 	top: -300px
+}
+#loadingImage {
+	height: 20%;
 }
