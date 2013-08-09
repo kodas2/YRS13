@@ -33,10 +33,21 @@
 		var tweetFloatInterval = 0;
 
 		function displayBinTweet(tweetElem) {
-			$(tweetElem).append($("<img src=\"tweetBinIcon.png\"></img>")).on("click", function() {
-				$(this).parent().remove();
-				window.tweetCounter++
-			});
+
+			if ($(tweetElem).children("img").length == 0) {
+				$(tweetElem).append($("<img src=\"bin.png\"></img>")).on("click", function() {
+					$(this).parent().remove();
+					window.tweetCounter++
+					if (tweetCounter >= window.currentTweets.length) {
+						tweetCounter = 0;
+					}
+					var tweet = document.createElement("div");
+					$(tweet).attr("class", "tweet").html(currentTweets[tweetCounter]);
+					$("#tweets").append(tweet);
+				});
+			} else {
+				$(this).children("img").show();
+			}
 		}
 
 		function calculateTweetSpacing() {
@@ -64,6 +75,8 @@
 
 			$(".tweet").on("hover", function() {
 				displayBinForTweet(this);
+			}, function() {
+				$(this).children("img").hide();
 			});
 
 			calculateTweetSpacing();
