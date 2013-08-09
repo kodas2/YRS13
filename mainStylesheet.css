@@ -147,3 +147,7 @@ body {
 	border: solid 2px #CCCCB2;/*add in light grey colour*/
 	border-radius: 5px 5px 5px 5px;
 }
+#loadingContainer {
+	position: relative;
+	top: -300px
+}

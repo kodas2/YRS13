@@ -32,11 +32,10 @@
 		var tweetCounter = 0;
 		var tweetFloatInterval = 0;
 
-		function displayBinTweet(tweetElem) {
-
+		function displayBinForTweet(tweetElem) {
 			if ($(tweetElem).children("img").length == 0) {
-				$(tweetElem).append($("<img src=\"bin.png\"></img>")).on("click", function() {
-					$(this).parent().remove();
+				$(tweetElem).append($("<img src=\"bin.png\" class=\"binImage\"></img>")).on("click", function() {
+					$(tweetElem).remove();
 					window.tweetCounter++
 					if (tweetCounter >= window.currentTweets.length) {
 						tweetCounter = 0;
@@ -44,9 +43,16 @@
 					var tweet = document.createElement("div");
 					$(tweet).attr("class", "tweet").html(currentTweets[tweetCounter]);
 					$("#tweets").append(tweet);
+
+					$(".tweet").hover(function() {
+						displayBinForTweet(this);
+					}, function() {
+						$(this).children("img").hide();
+					});
 				});
+				calculateTweetSpacing();
 			} else {
-				$(this).children("img").show();
+				$(tweetElem).children("img").show();
 			}
 		}
 
@@ -73,7 +79,7 @@
 				tweetCounter++;
 			}
 
-			$(".tweet").on("hover", function() {
+			$(".tweet").hover(function() {
 				displayBinForTweet(this);
 			}, function() {
 				$(this).children("img").hide();
@@ -103,7 +109,7 @@
 			if (hasUpdatedChart) {
 				var loadingImage = document.createElement("img");
 				var loadingText = document.createElement("span");
-				$(loadingImage).attr("id", "loadingImage").attr("src", "loadingImage.png");
+				$(loadingImage).attr("id", "loadingImage").attr("src", "loadingimage.png");
 				$(loadingText).attr("id", "loadingText");
 				$(loadingText).attr("class", "bgText").html("Loading...");
 
@@ -115,6 +121,9 @@
 				$("#chartContainerCurrent").append(loadingContainer);
 
 				//TODO: Set loadingImageInterval to rotate the loading image
+				window.loadingImageInterval = setInterval(function() {
+					$("#loadingImage").transition({rotate:'18deg'});
+				}, 200);
 
 				clearInterval(window.showLoadingImageRetryInterval);
 				window.showLoadingImageRetryInterval = 0;
@@ -135,13 +144,13 @@
 			//Most browsers
 			$("#chartContainerCurrent").on("transitionend", function(eventObj) {
 				$("#chartContainerOld").remove();
-				hasUpdatedChart = true;
 			});
 			//Chrome and Safari
 			$("#chartContainerCurrent").on("webkitTransitionEnd", function(eventObj) {
 				$("#chartContainerOld").remove();
-				hasUpdatedChart = true;
 			});
+
+			hasUpdatedChart = true;
 
 			setTimeout(function() {
 				$("#chartContainerCurrent").css("top", "36%");
