@@ -35,7 +35,7 @@
 
 		function displayBinForTweet(tweetElem) {
 			if ($(tweetElem).children("img").length == 0) {
-				$(tweetElem).append($("<img src=\"bin.png\" class=\"binImage\"></img>")).on("click", function() {
+				$(tweetElem).append($("<img src=\"bin.png\" class=\"binImage\"height=\"20px\"width=\"20px\"></img>")).on("click", function() {
 					$(tweetElem).remove();
 					window.tweetCounter++
 					if (tweetCounter >= window.currentTweets.length) {
