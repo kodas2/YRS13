@@ -32,6 +32,10 @@
 		var tweetCounter = 0;
 		var tweetFloatInterval = 0;
 
+		function displayBinTweet(tweetElem) {
+			
+		}
+
 		function calculateTweetSpacing() {
 			var totalHeight = 0;
 			var noOfTweets = 0;
@@ -39,9 +43,9 @@
 			$(".tweet").each(function(i) {
 				totalHeight += $(this).height();
 				noOfTweets += 1;
-			}
+			});
 			alert(totalHeight);
-			var spacing = ($("#tweets").height() - totalHeight) / (noOfTweets > 2 ? noOfTweets - 1 : 1);
+			var spacing = ($("#tweets").height() - totalHeight) / (noOfTweets > 2 ? noOfTweets - 1 : 1) - 15;
 			$(".tweet").next().css("margin-top", spacing);
 		}
 	

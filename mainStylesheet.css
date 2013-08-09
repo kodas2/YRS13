@@ -138,13 +138,12 @@ body {
 }
 .tweet {
 	width: 80%;
-	border: 2px solid;
 	position: relative;
 	margin-left: 10%;
 	height: auto;
 
 }
 .tweet:hover {
-	border: solid 2p ;/*add in light grey colour*/
+	border: solid 2px #CCCCB2;/*add in light grey colour*/
 	border-radius: 5px 5px 5px 5px;
 }
