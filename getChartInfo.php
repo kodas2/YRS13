@@ -1,6 +1,7 @@
 <?php
 $companyname = "";
 $product = "";
+date_default_timezone_set("UTC");
 if((isset($_GET['stockname']))) {
 	$companyname = $_GET['stockname'];	
 } else {
@@ -10,6 +11,13 @@ $product = "";
 if((isset($_GET['product']))) {
 	$product = $_GET['product'];
 }
+$topsyapijson = file_get_contents("http://otter.topsy.com/searchhistogram.json?q=kindle&period=357&slice=265000&apikey=OBTUFOILBGJS73J2PUMAAAAAACKMHDQSFJJAAAAAAAAFQGYA");
+$topsyapi = json_decode($topsyapijson, true);
+$topsyarray = array();
+
+foreach($topsyapi['response']['histogram'] as $topsy) :
+	array_push($topsyarray, $topsy);
+endforeach;
 /*
 $product = str_replace(" ", "%20", $product);
 //$newsstories = file_get_contents("https://www.google.com/trends/fetchComponent?q=" . $product . "&cid=TIMESERIES_GRAPH_0&export=3");
@@ -68,6 +76,8 @@ for($i=0; $i<count($historystock)-1; $i+=14) {
 	array_unshift($dates, $historystock[$i + 0]);
 	array_unshift($prices, $historystock[$i + 6]);
 }
+echo count($dates) . ', ';
+echo count($topsyarray) . ', ';
 $highestprice = 0;
 foreach($prices as $price) :
 	if($price > $highestprice && $price != "Adj Close") $highestprice = $price;
@@ -89,7 +99,7 @@ echo <<<_END
 _END;
 		foreach($dates as $date) :
 					if($date != "Date" && $date != "") {
-						if($date == $dates[count($dates)-1]) {
+						if($date == end($dates)) {
 							echo '"' . $date . '"';
 						} else {
 							echo '"' . $date . '"' . ",";
@@ -108,15 +118,15 @@ echo <<<_END
 _END;
 		foreach($prices as $price) :
 					if($price != "Adj Close" && $price != "") {
-						if($price == $prices[count($prices)-1]) {
+						if($price == end($prices)) {
 							echo $price;
 						} else {
 							echo $price . ",";
 						}
 					}
 		endforeach;
-		echo']}]}';
-		/*
+		echo']},';
+		
 		echo <<<_END
 				{
 					fillColor : "rgba(151,187,205,0.3)",
@@ -125,16 +135,15 @@ _END;
 					pointStrokeColor : "#fff",
 					data : [
 _END;
-		foreach($prices as $price) :
-					if($price != "Adj Close" && $price != "") {
-						if($price == $prices[count($prices)-1]) {
-							echo "100";
-						} else {
-							echo "100,";
-						}
-					}
+		foreach($topsyarray as $topsy) :
+				if($topsy == $topsyarray[count($topsyarray)-1]) {
+					echo $topsy;
+				} else {
+					echo $topsy . ",";
+				}
 		endforeach;
-		echo']';
+		echo']}]}';
+		/*
 echo <<<_END
 				}
 			]
