@@ -35,6 +35,7 @@
 		function displayBinTweet(tweetElem) {
 			$(tweetElem).append($("<img src=\"tweetBinIcon.png\"></img>")).on("click", function() {
 				$(this).parent().remove();
+				window.tweetCounter++
 			});
 		}
 
