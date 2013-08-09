@@ -76,8 +76,6 @@ for($i=0; $i<count($historystock)-1; $i+=14) {
 	array_unshift($dates, $historystock[$i + 0]);
 	array_unshift($prices, $historystock[$i + 6]);
 }
-echo count($dates) . ', ';
-echo count($topsyarray) . ', ';
 $highestprice = 0;
 foreach($prices as $price) :
 	if($price > $highestprice && $price != "Adj Close") $highestprice = $price;
