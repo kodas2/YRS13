@@ -33,7 +33,9 @@
 		var tweetFloatInterval = 0;
 
 		function displayBinTweet(tweetElem) {
-			$(tweetElem).append($("<img src=\"tweetBinIcon.png\"></img>"));
+			$(tweetElem).append($("<img src=\"tweetBinIcon.png\"></img>")).on("click", function() {
+				$(this).parent().remove();
+			});
 		}
 
 		function calculateTweetSpacing() {
@@ -44,7 +46,6 @@
 				totalHeight += $(this).height();
 				noOfTweets += 1;
 			});
-			alert(totalHeight);
 			var spacing = ($("#tweets").height() - totalHeight) / (noOfTweets > 2 ? noOfTweets - 1 : 1) - 15;
 			$(".tweet").next().css("margin-top", spacing);
 		}
@@ -141,7 +142,7 @@
 				chartIsStillLoading = true;
 				ajaxReq("getCompanyFromProductName.php?product=" + searchProductName, function(responseCompanyName) {
 					getTweets(searchProductName);
-					ajaxReq("getChartInfo.php?stockname=" + responseCompanyName, function(responseChartInfo) {
+					ajaxReq("getChartInfo.php?stockname=" + responseCompanyName + "&product=" + searchProductName, function(responseChartInfo) {
 						eval(responseChartInfo);
 
 						$("#loadingContainer").remove();
