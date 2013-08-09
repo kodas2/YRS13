@@ -142,7 +142,7 @@
 				chartIsStillLoading = true;
 				ajaxReq("getCompanyFromProductName.php?product=" + searchProductName, function(responseCompanyName) {
 					getTweets(searchProductName);
-					ajaxReq("getChartInfo.php?stockname=" + responseCompanyName, function(responseChartInfo) {
+					ajaxReq("getChartInfo.php?stockname=" + responseCompanyName + "&product=" + searchProductName, function(responseChartInfo) {
 						eval(responseChartInfo);
 
 						$("#loadingContainer").remove();
