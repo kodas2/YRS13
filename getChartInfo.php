@@ -11,7 +11,7 @@ $product = "";
 if((isset($_GET['product']))) {
 	$product = $_GET['product'];
 }
-$topsyapijson = file_get_contents("http://otter.topsy.com/searchhistogram.json?q=kindle&period=357&slice=265000&apikey=OBTUFOILBGJS73J2PUMAAAAAACKMHDQSFJJAAAAAAAAFQGYA");
+$topsyapijson = file_get_contents("http://otter.topsy.com/searchhistogram.json?q=" . $product .  "&period=357&slice=265000&apikey=OBTUFOILBGJS73J2PUMAAAAAACKMHDQSFJJAAAAAAAAFQGYA");
 $topsyapi = json_decode($topsyapijson, true);
 $topsyarray = array();
 
