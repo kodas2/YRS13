@@ -87,7 +87,7 @@ endforeach;
 
 $topsyadjust = $highestprice/$highesttopsyday;
 for($i=0; $i<count($topsyarray); $i++) {
-	$topsyarray[i] *= $topsyadjust;
+	$topsyarray[$i] *= $topsyadjust;
 }
 
 $highestprice = $highestprice/10;
